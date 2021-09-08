@@ -1,0 +1,37 @@
+﻿@model int
+@using PlayingCards.Constants
+
+@{
+    string rank = Cards.RANKS[Model % 13];
+    string suit = Cards.SUITS[Model / 13];
+    string suitName = Cards.SUIT_NAMES[Model / 13];
+    int value = Cards.VALUES[Model % 13];
+    string color = (((Model / 13) % 2) == 0) ? "black" : "red";
+}
+
+<div class="card @color" data-card-index="@Model" data-card-value="@value" data-card-suit="@suitName">
+    <div class="card-suits">
+        @foreach (SuitPosition suitPosition in Cards.SUIT_POSITIONS[Model % 13])
+        {
+            <div class="card-suit @(suitPosition.Mirrored ? "mirrored" : "")" style="left: @(suitPosition.X * 100)%; top: @(suitPosition.Y * 100)%">
+                @suit
+            </div>
+        }
+    </div>
+    <div class="card-topleft">
+        <div class="card-corner-rank">
+            @rank
+        </div>
+        <div class="card-corner-suit">
+            @suit
+        </div>
+    </div>
+    <div class="card-bottomright">
+        <div class="card-corner-rank">
+            @rank
+        </div>
+        <div class="card-corner-suit">
+            @suit
+        </div>
+    </div>
+</div>

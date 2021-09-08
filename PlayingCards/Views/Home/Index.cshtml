@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Random random = new Random();
+}
+
+<div class="row">
+    <div class="col text-center">
+        <partial name="~/Views/Shared/_CardDeck.cshtml" model="Enumerable.Range(0, 52).OrderBy((a) => random.Next(52)).Take(5).ToArray()" />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col text-center">
+        <form asp-controller="Home" asp-action="EvaluateHand" method="post">
+            <a asp-controller="Home" asp-action="Index" class="btn btn-primary">New Hand</a>
+            <button type="submit" name="submit" class="btn btn-secondary">Get Poker Hand</button>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,8 @@
+﻿@model int[]
+
+<div class="deck">
+    @foreach (int i in Model)
+    {
+        <partial name="~/Views/Shared/_Card.cshtml" model="i" />
+    }
+</div>
