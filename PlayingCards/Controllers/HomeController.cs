@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace PlayingCards.Controllers
 {
@@ -17,22 +16,13 @@ namespace PlayingCards.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-
-            // Straight flush (same suit in sequence)
-            // Four of a kind
-            // Full house (pair and three of a kind)
-            // Flush (same suit)
-            // Straight (numerically in order)
-            // Three of a kind
-            // Two pair
-            // Pair
-            // High card
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            Random random = new Random();
+            return View(new IndexViewModel() { RandomCards = Enumerable.Range(0, 52).OrderBy((a) => random.Next(52)).Take(5).ToArray() });
         }
 
         [HttpPost]
@@ -44,45 +34,40 @@ namespace PlayingCards.Controllers
 
             // Straight Flush
             if (suitCount.Keys.Count() == 1 && valueCount.Values.OrderBy(x => x).SequenceEqual(Enumerable.Range(valueCount.Values.Min(), valueCount.Count())))
-                return Ok(new { status = 200, type = "Straight Flush" });
+                return Ok(new PokerHandResponse { Status = 200, HandType = "Straight Flush" });
 
             // Four of a Kind
             if (valueCount.Values.Any(x => x == 4))
-                return Ok(new { status = 200, type = "Four of a Kind" });
+                return Ok(new PokerHandResponse { Status = 200, HandType = "Four of a Kind" });
 
             // Full House | Three of a Kind
             if (valueCount.Values.Any(x => x == 3))
             {
                 // Full House
                 if (valueCount.Values.Any(x => x == 2))
-                    return Ok(new { status = 200, type = "Full House" });
+                    return Ok(new PokerHandResponse { Status = 200, HandType = "Full House" });
                 // Three of a Kind
-                return Ok(new { status = 200, type = "Three of a Kind" });
+                return Ok(new PokerHandResponse { Status = 200, HandType = "Three of a Kind" });
             }
 
             // Flush
             if (suitCount.Keys.Count() == 1)
-                return Ok(new { status = 200, type = "Flush" });
+                return Ok(new PokerHandResponse { Status = 200, HandType = "Flush" });
 
             // Straight
             if (valueCount.Values.OrderBy(x => x).SequenceEqual(Enumerable.Range(valueCount.Values.Min(), valueCount.Count())))
-                return Ok(new { status = 200, type = "Straight" });
+                return Ok(new PokerHandResponse { Status = 200, HandType = "Straight" });
 
             // Two Pair
             if (valueCount.Values.Where(x => x == 2).Count() == 2)
-                return Ok(new { status = 200, type = "Two Pair" });
+                return Ok(new PokerHandResponse { Status = 200, HandType = "Two Pair" });
             
             // Pair
             if (valueCount.Values.Any(x => x == 2))
-                return Ok(new { status = 200, type = $"Pair of { Cards.RANKS[Array.IndexOf<int>(Cards.VALUES, valueCount.FirstOrDefault(x => x.Value == 2).Key)]}s" });
+                return Ok(new PokerHandResponse { Status = 200, HandType = $"Pair of { Cards.RANKS[Array.IndexOf<int>(Cards.VALUES, valueCount.FirstOrDefault(x => x.Value == 2).Key)]}s" });
 
             // High Card
-            return Ok(new { status = 200, type = "High Card" });
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
+            return Ok(new PokerHandResponse { Status = 200, HandType = "High Card" });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

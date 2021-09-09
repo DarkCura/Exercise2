@@ -89,10 +89,7 @@ const registerEvents = () => {
                     backdrop: 'static',
                     show: true
                 });
-                console.log(data);
             });
-
-        //console.log(__cards);
     });
 
     document.body.appendChild(createModal());

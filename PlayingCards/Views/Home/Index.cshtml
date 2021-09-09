@@ -1,11 +1,11 @@
-﻿@{
+﻿@model IndexViewModel
+@{
     ViewData["Title"] = "Home Page";
-    Random random = new Random();
 }
 
 <div class="row">
     <div class="col text-center">
-        <partial name="~/Views/Shared/_CardDeck.cshtml" model="Enumerable.Range(0, 52).OrderBy((a) => random.Next(52)).Take(5).ToArray()" />
+        <partial name="~/Views/Shared/_CardDeck.cshtml" model="Model.RandomCards" />
     </div>
 </div>
 
